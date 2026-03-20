@@ -571,3 +571,22 @@ Delete a field.
 **Properties**
 
 Same as `Get Field <#get-field>`_.
+
+Error response
+==============
+
+You can't delete a Custom Field that's in use by a Segment. If the field is referenced in any Segment filters, the API returns an ``HTTP 409 (Conflict)`` response.
+
+.. code-block:: json
+
+   {
+     "errors": [
+       {
+         "code": 409,
+         "message": "This Custom Field cannot be deleted because it is currently in use by one or more Segments.",
+         "details": []
+       }
+     ]
+   }
+
+To delete the field, first remove it from all Segment filters that reference it.
