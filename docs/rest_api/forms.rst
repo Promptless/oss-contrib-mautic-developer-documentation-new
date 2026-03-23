@@ -245,7 +245,7 @@ Form properties
        * ``message``: displays a success message
    * - ``postActionProperty``
      - string
-     - The data associated with the ``postAction``. Contains the redirect URL when set to ``redirect``, or the success message when set to ``message``
+     - The data associated with the ``postAction``. Contains the redirect URL when set to ``redirect``, or the success message when set to ``message``. See :ref:`redirect URL format <redirect URL format>` for URL requirements when using the ``redirect`` action
    * - ``noIndex``
      - boolean
      - Search indexing status - set to ``1`` or ``true`` to send a ``noindex`` HTTP header. When not set, it defaults to indexing
@@ -258,10 +258,58 @@ Form properties
 
 .. vale on
 
+.. _redirect URL format:
+
+Redirect URL format
+-------------------
+
+When ``postAction`` is set to ``redirect``, the ``postActionProperty`` must contain a valid URL. Mautic validates this value and rejects improperly formatted URLs.
+
+**URL requirements:**
+
+* URLs must include a protocol (``http://`` or ``https://``) unless the URL begins with a ``{pagelink}`` token
+* URLs without a protocol such as ``example.com`` or ``ttps://example.com`` aren't valid
+
+**Supported tokens:**
+
+You can use the following tokens in redirect URLs. Mautic replaces these tokens with actual values when processing the Form submission:
+
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Token
+     - Description
+   * - ``{pagelink=ID}``
+     - Replaced with the URL of a Mautic Landing Page. ``ID`` is the numeric page ID. This token can appear at the start of the URL, replacing the protocol and domain
+   * - ``{contactfield=ALIAS}``
+     - Replaced with a value from the submitting Contact's profile. ``ALIAS`` is the field alias such as ``email`` or ``firstname``
+   * - ``{formfield=ALIAS}``
+     - Replaced with a value from the Form submission. ``ALIAS`` is the field alias from the submitted Form
+
+**Example redirect URLs:**
+
+.. code-block:: text
+
+   # Standard URL
+   https://example.com/thank-you
+
+   # URL with Contact Field token
+   https://example.com/profile?email={contactfield=email}
+
+   # URL with Form Field token
+   https://example.com/result?answer={formfield=survey_response}
+
+   # URL starting with pagelink token
+   {pagelink=123}
+
+   # Pagelink with path and tokens
+   {pagelink=123}/confirmation?name={contactfield=firstname}&response={formfield=feedback}
+
 .. _get Form Field properties:
 
 .. vale off
-   
+
 Form Field properties
 ---------------------
 
@@ -646,8 +694,8 @@ POST parameters
    * - ``postActionProperty``
      - string
      - **Required.**
-       
-       The data associated with the ``postAction``. Contains the redirect URL when set to ``redirect``, or the success message when set to ``message``
+
+       The data associated with the ``postAction``. Contains the redirect URL when set to ``redirect``, or the success message when set to ``message``. See :ref:`redirect URL format <redirect URL format>` for URL requirements when using the ``redirect`` action
    * - ``fields``
      - array
      - **Required.**
