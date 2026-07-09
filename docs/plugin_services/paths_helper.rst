@@ -12,3 +12,33 @@ Paths helper
    Please read the :xref:`dev docs contributing guidelines` and :xref:`Contributing to Mautic’s documentation` to get started.
 
 .. vale on
+
+Use ``Mautic\CoreBundle\Helper\PathsHelper`` to resolve Mautic's system paths - images, Themes, cache, and more - instead of hard-coding directory locations. Inject the helper into your service:
+
+.. code-block:: php
+
+    <?php
+
+    use Mautic\CoreBundle\Helper\PathsHelper;
+
+    final class ExampleService
+    {
+        public function __construct(private PathsHelper $pathsHelper)
+        {
+        }
+
+        public function resolveImagePaths(): void
+        {
+            // Relative path, for example 'media/images'
+            $relativeImagesDir = $this->pathsHelper->getSystemPath('images');
+
+            // Absolute path, for example '/var/www/html/media/images'
+            $absoluteImagesDir = $this->pathsHelper->getSystemPath('images', true);
+        }
+    }
+
+Pass ``true`` as the second argument to ``getSystemPath()`` to return an absolute path. ``PathsHelper`` also provides convenience methods such as ``getCachePath()``, ``getRootPath()``, and ``getThemesPath()``.
+
+.. tip::
+
+   Use the ``tmp`` - or ``temporary`` - path to store temporary files. Prefer it over the general ``cache`` location for that purpose.
