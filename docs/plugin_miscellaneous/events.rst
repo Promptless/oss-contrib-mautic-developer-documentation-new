@@ -56,12 +56,12 @@ The easiest way to listen to events is with an event subscriber. Implement ``Sym
         }
     }
 
-Mautic tags each class that implements ``EventSubscriberInterface`` as an event subscriber automatically, so no manual service configuration is required.
+Mautic tags each class that implements ``EventSubscriberInterface`` as an event subscriber automatically, so you don't need to configure a service manually.
 
 Available events
 ****************
 
-Mautic defines many events across its bundles. To find the ones you can listen to, look at the ``*Events.php`` file in the root of the relevant bundle. For example, Contact-related events are defined in ``app/bundles/LeadBundle/LeadEvents.php``. Always reference the event constants rather than the string names, so future changes to event names don't break your Plugin.
+Mautic defines many events across its bundles. To find the ones you can listen to, look at the ``*Events.php`` file in the root of the relevant bundle. For example, Mautic defines Contact-related events in ``app/bundles/LeadBundle/LeadEvents.php``. Always reference the event constants rather than the string names, so future changes to event names don't break your Plugin.
 
 Custom events
 *************
