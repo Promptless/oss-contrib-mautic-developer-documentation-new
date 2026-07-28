@@ -1,23 +1,54 @@
 Notes
 #####
 
+Use this endpoint to manipulate and obtain details on Contact Notes in Mautic.
+
 .. vale off
 
-.. note::
-
-   The content for this page requires a major update. The legacy page contains outdated and potentially inaccurate information. You can still access it in the :xref:`legacy repository`.
-
-   If you're interested in helping develop the new content for this page and others, consider joining the documentation efforts.
-
-   Please read the :xref:`dev docs contributing guidelines` and :xref:`Contributing to Mautic’s documentation` to get started.
+Permissions
+***********
 
 .. vale on
 
-Use this endpoint to obtain details on Mautic's Contact Notes.
+The Notes API uses the ``lead:notes`` permission set, which is separate from the ``lead:leads`` - Contact on UI - permission set. However, ``lead:notes`` permissions don't grant access to the associated Contact: any operation involving a Contact still requires the appropriate ``lead:leads`` permission.
 
-**Using Mautic's API Library**
+For the standalone ``/notes`` endpoints, Mautic evaluates ``viewown``/``viewother``, ``editown``/``editother``, and ``deleteown``/``deleteother`` against the User who created the Note, not the owner of the associated Contact. The Note's ``createdBy`` field determines ownership.
 
-You can interact with this API through the :xref:`Mautic API Library` as follows, or use the various http endpoints as described in this document.
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Permission
+     - Description
+   * - ``lead:notes:viewown``
+     - View Notes created by the authenticated User
+   * - ``lead:notes:viewother``
+     - View Notes created by other Users
+   * - ``lead:notes:editown``
+     - Edit Notes created by the authenticated User
+   * - ``lead:notes:editother``
+     - Edit Notes created by other Users
+   * - ``lead:notes:create``
+     - Create new Notes
+   * - ``lead:notes:deleteown``
+     - Delete Notes created by the authenticated User
+   * - ``lead:notes:deleteother``
+     - Delete Notes created by other Users
+   * - ``lead:notes:full``
+     - Full access to all Note operations
+
+.. vale off
+
+Using the Mautic API library
+****************************
+
+.. vale off
+
+You can interact with this API using the :xref:`Mautic API Library` as below, or the various HTTP endpoints described in this document.
+
+.. vale on
+
+.. vale on
 
 .. code-block:: php
 
@@ -39,6 +70,8 @@ Get Note
 
 .. vale on
 
+Retrieves an individual Note.
+
 .. code-block:: php
 
    <?php
@@ -46,165 +79,149 @@ Get Note
    //...
    $note = $noteApi->get($id);
 
-.. code-block:: json
-
-   {
-     "note":{
-       "id":39,
-       "text":"Contact note created via API request",
-       "type":"general",
-       "dateTime":null,
-       "lead":{
-         "id":1405,
-         "points":0,
-         "color":null,
-         "fields":{
-           "core":{
-             "firstname":{
-               "id":"2",
-               "label":"First Name",
-               "alias":"firstname",
-               "type":"text",
-               "group":"core",
-               "field_order":"42",
-               "object":"lead",
-               "value":"Note API test"
-             },
-             "lastname":{
-               "id":"3",
-               "label":"Last Name",
-               "alias":"lastname",
-               "type":"text",
-               "group":"core",
-               "field_order":"44",
-               "object":"lead",
-               "value":null
-             }
-           }
-         }
-       }
-     }
-   }
-
-Get an individual Note by ID.
-
 .. vale off
 
-**HTTP Request**
+HTTP request
+============
 
 .. vale on
 
 ``GET /notes/ID``
 
-.. vale off
+**Required permissions:** ``lead:notes:viewown`` or ``lead:notes:viewother``
 
-**Response**
+.. _get Note response:
 
-.. vale on
+Response
+========
 
-``Expected Response Code: 200``
+* Returns ``200 OK`` when the request successfully retrieves the Note.
 
-See JSON code example.
+.. code-block:: json
 
-**Note Properties**
+   {
+       "note": {
+           "id": 1,
+           "text": "<p>Discussed product demo requirements. Follow-up scheduled for next week.</p>",
+           "type": "general",
+           "dateTime": "2015-07-23T13:14:00-05:00",
+           "lead": {
+               "id": 47
+           },
+           "dateAdded": "2015-07-23T13:14:00-05:00",
+           "createdBy": 1,
+           "createdByUser": "Joe Smith"
+       }
+   }
+
+.. _get Note properties:
+
+Properties
+----------
 
 .. list-table::
+   :widths: 25 25 50
    :header-rows: 1
 
    * - Name
      - Type
      - Description
    * - ``id``
-     - int
+     - integer
      - ID of the Note
-   * - ``lead``
-     - array
-     - Data of the Contact
    * - ``text``
      - string
-     - Note text
+     - Body content of the Note - supports HTML
    * - ``type``
      - string
-     - Note type
-   * - ``datetime``
+     - Type of Note: ``general``, ``email``, ``call``, or ``meeting``
+   * - ``dateTime``
      - datetime
-     - Date and time related to the Note.
+     - Date and time associated with the Note
+   * - ``lead``
+     - object
+     - The Contact associated with this Note
+   * - ``dateAdded``
+     - datetime
+     - Note creation date and time
+   * - ``createdBy``
+     - integer
+     - ID of the User who created the Note
+   * - ``createdByUser``
+     - string
+     - Name of the User who created the Note
 
 .. vale off
 
-List Contact Notes
-******************
+List Notes
+**********
 
 .. vale on
+
+Retrieves a list of Notes.
 
 .. code-block:: php
 
    <?php
 
    //...
-   $notes = $noteApi->getList($searchFilter, $start, $limit, $orderBy, $orderByDir, $publishedOnly, $minimal);
-
-.. code-block:: json
-
-   {
-     "total":24,
-     "notes":[
-       {
-         "id":1,
-         "text":"A test note",
-         "type":"general",
-         "dateTime":"2016-06-14T18:07:00+00:00",
-         "lead":{
-           "id":1,
-           "points":0,
-           "color":null,
-           "fields":[]
-         }
-       }
-     ]
-   }
+   $notes = $noteApi->getList($searchFilter, $start, $limit, $orderBy, $orderByDir);
 
 .. vale off
 
-**HTTP Request**
+HTTP request
+============
 
 .. vale on
 
 ``GET /notes``
 
-.. vale off
+**Required permissions:** ``lead:notes:viewown`` or ``lead:notes:viewother``
 
-**Response**
-
-.. vale on
-
-``Expected Response Code: 200``
-
-See JSON code example.
-
-**Note Properties**
+Query parameters
+----------------
 
 .. list-table::
+   :widths: 25 75
    :header-rows: 1
 
    * - Name
-     - Type
      - Description
-   * - ``id``
-     - int
-     - ID of the Note
-   * - ``lead``
-     - array
-     - Data of the Contact
-   * - ``text``
-     - string
-     - Note text
-   * - ``type``
-     - string
-     - Note type
-   * - ``datetime``
-     - datetime
-     - Date and time related to the Note.
+   * - ``search``
+     - String or search command to filter entities by
+   * - ``start``
+     - Starting row for the entities returned - defaults to ``0``
+   * - ``limit``
+     - Limit number of entities to return - defaults to the system configuration for pagination
+   * - ``orderBy``
+     - Column to sort by. Any column in the response is valid.
+
+       **Note**: convert ``camelCase`` properties to ``snake_case``. For example, ``dateAdded`` becomes ``date_added``, ``webhookUrl`` becomes ``webhook_url``, and so on
+   * - ``orderByDir``
+     - Sort direction - ``asc`` or ``desc``
+
+Response
+========
+
+* Returns ``200 OK`` when the request successfully retrieves the Notes list.
+
+.. code-block:: json
+
+   {
+       "total": 2,
+       "notes": [
+           {
+               "id": 1,
+               "text": "<p>Discussed product demo requirements. Follow-up scheduled for next week.</p>",
+               "type": "general",
+               "dateTime": "2015-07-23T13:14:00-05:00",
+               "lead": {
+                   "id": 47
+               }
+           },
+           // ...
+       ]
+   }
 
 .. vale off
 
@@ -213,67 +230,66 @@ Create Note
 
 .. vale on
 
+Creates a new Note for a Contact.
+
 .. code-block:: php
 
    <?php
 
-   $contactID = 1;
-
-   $data = array(
-       'lead' => $contactID,
-       'text' => 'Note A',
+   $data = [
+       'lead' => 47,
+       'text' => 'Note content here',
        'type' => 'general',
-   );
+   ];
 
    $note = $noteApi->create($data);
 
-Create a new Note.
-
 .. vale off
 
-**HTTP Request**
+HTTP request
+============
 
 .. vale on
 
 ``POST /notes/new``
 
-.. vale off
+**Required permissions:** ``lead:notes:create``
 
-**Post Parameters**
+.. note::
 
-.. vale on
+   In addition to ``lead:notes:create``, the User must have permission to view the associated Contact - ``lead:leads:viewown`` or ``lead:leads:viewother``. Mautic checks view access against the Contact owner before creating the Note.
+
+.. _create Note POST parameters:
+
+POST parameters
+---------------
 
 .. list-table::
+   :widths: 25 25 50
    :header-rows: 1
 
    * - Name
-     - Type
+     - Required
      - Description
+   * - ``lead``
+     - Yes
+     - ID of the Contact to associate the Note with
    * - ``text``
-     - string
-     - Note text
+     - Yes
+     - Body content of the Note - supports HTML
    * - ``type``
-     - string
-     - Note type
-   * - ``datetime``
-     - datetime
-     - Date and time related to the Note.
+     - No
+     - Type of Note: ``general`` - default, ``email``, ``call``, or ``meeting``
+   * - ``dateTime``
+     - No
+     - Date and time associated with the Note - auto-set to current time if not provided
 
-.. vale off
+Response
+========
 
-**Response**
+* Returns ``201 Created`` when the Note is successfully created.
 
-.. vale on
-
-``Expected Response Code: 201``
-
-.. vale off
-
-**Properties**
-
-.. vale on
-
-Same as `Get Note`.
+The response is a JSON object similar to :ref:`Get Note <get Note response>`.
 
 .. vale off
 
@@ -282,80 +298,51 @@ Edit Note
 
 .. vale on
 
+Edits a Note. This operation supports ``PUT`` or ``PATCH`` depending on the desired behavior:
+
+* ``PUT``: **full replacement**. The request creates a new Note if the ID is missing. If the ID exists, the request clears all existing data and replaces it with the provided values.
+* ``PATCH``: **partial update**. The request only updates field values based on the request data. The request fails when the Note ID doesn't exist.
+
 .. code-block:: php
 
    <?php
 
    $id   = 1;
-   $data = array(
-       'text' => 'Note B',
-       'type' => 'general',
-   );
+   $data = [
+       'text' => 'Updated note content',
+       'type' => 'call',
+   ];
 
-   // Create new a note of ID 1 is not found?
-   $createIfNotFound = true;
+   // Using PATCH - update specific fields only
+   $note = $noteApi->edit($id, $data);
 
-   $note = $noteApi->edit($id, $data, $createIfNotFound);
-
-Edit a Note. Note that this supports PUT or PATCH depending on the desired behavior.
-
-**PUT** creates a Note if the given ID doesn't exist and clears all the Note information, adds the information from the request.
-
-**PATCH** fails if the Note with the given ID doesn't exist and updates the Note field values with the values from the request.
+   // Using PUT - create or completely replace
+   $note = $noteApi->edit($id, $data, true);
 
 .. vale off
 
-**HTTP Request**
+HTTP request
+============
 
 .. vale on
 
-To edit a Note and return a 404 if the Note isn't found:
+* ``PUT /notes/ID/edit``: updates an existing Note or creates a new one when the ID doesn't exist.
+* ``PATCH /notes/ID/edit``: updates an existing Note. The request fails when the ID doesn't exist.
 
-``PATCH /notes/ID/edit``
+**Required permissions:** ``lead:notes:editown`` or ``lead:notes:editother``
 
-To edit a Note and create a new one if the Note isn't found:
+POST parameters
+---------------
 
-``PUT /notes/ID/edit``
+Accepts the same parameters as those described in :ref:`Create Note <create Note POST parameters>`. All parameters are optional.
 
-.. vale off
+Response
+========
 
-**Post Parameters**
+* ``PUT``: returns ``200 OK`` when the request successfully updates the Note or ``201 Created`` when the request creates a Note.
+* ``PATCH``: returns ``200 OK`` when the request successfully updates the Note or ``404 Not Found`` error when the Note ID doesn't exist.
 
-.. vale on
-
-.. list-table::
-   :header-rows: 1
-
-   * - Name
-     - Type
-     - Description
-   * - ``text``
-     - string
-     - Note text
-   * - ``type``
-     - string
-     - Note type
-   * - ``datetime``
-     - datetime
-     - Date and time related to the Note.
-
-.. vale off
-
-**Response**
-
-.. vale on
-
-If ``PUT``, the expected response code is ``200`` when Mautic edits an existing Note or ``201`` when it creates a new one.
-
-If ``PATCH``, the expected response code is ``200``.
-
-.. vale off
-
-**Properties**
-
-.. vale on
-
-Same as `Get Note`.
+The response is a JSON object similar to :ref:`Get Note <get Note response>`.
 
 .. vale off
 
@@ -364,34 +351,50 @@ Delete Note
 
 .. vale on
 
+Deletes a Note.
+
 .. code-block:: php
 
    <?php
 
    $note = $noteApi->delete($id);
 
-Delete a Note.
-
 .. vale off
 
-**HTTP Request**
+HTTP request
+============
 
 .. vale on
 
 ``DELETE /notes/ID/delete``
 
-.. vale off
+**Required permissions:** ``lead:notes:deleteown`` or ``lead:notes:deleteother``
 
-**Response**
+Response
+========
 
-.. vale on
+* Returns ``200 OK`` when the Note is successfully deleted.
 
-``Expected Response Code: 200``
+The response is a JSON object containing the data of the deleted Note, similar to :ref:`Get Note <get Note response>`.
 
-.. vale off
+.. code-block:: json
 
-**Properties**
+   {
+       "note": {
+           "id": 1,
+           "text": "<p>Discussed product demo requirements. Follow-up scheduled for next week.</p>",
+           "type": "general",
+           "dateTime": "2015-07-23T13:14:00-05:00",
+           "lead": {
+               "id": 47
+           },
+           "dateAdded": "2015-07-23T13:14:00-05:00",
+           "createdBy": 1,
+           "createdByUser": "Joe Smith"
+       }
+   }
 
-.. vale on
+Properties
+----------
 
-Same as `Get Note`.
+Refer to :ref:`Note properties <get Note properties>`.
