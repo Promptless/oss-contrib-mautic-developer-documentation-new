@@ -122,6 +122,10 @@ With Mautic 5 you can remove service definitions for **subscribers** and **forms
 Consider backward compatibility for services
 ============================================
 
+.. note::
+
+   Mautic deprecates the ``mautic.<bundle>.model.<name>`` service aliases for model classes, such as ``mautic.campaign.model.campaign``, in Mautic 8 and changes them to ``Mautic\CoreBundle\Factory\ModelFactory::getModel()``, keyed by each model's static ``getName()`` value. Inject ``ModelFactory`` and call ``getModel('campaign.campaign')``, or type-hint the model class directly. See the :xref:`Mautic 8 upgrade guide`.
+
 For core bundles it's important to care about backward compatibility and maintain the service aliases. If you're a Plugin developer you can jump directly into using Fully Qualified Class Names (FQCN) instead. If you do this, release the new Plugin version as a major release to warn users of your Plugin. You never know how people use your Plugin in production.
 
 In core bundles, keep the service aliases. So with a service definition like this:

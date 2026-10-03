@@ -51,6 +51,10 @@ You can build the schema through Doctrine's ``Doctrine\ORM\Mapping\Builder\Class
 
         Creates a many to one relationship with `Mautic\LeadBundle\Entity\Lead`. Defines a ``contact`` ORM property mapped to a ``contact_id`` column on the table with a foreign key to ``leads.id``.
 
+        .. note::
+
+           Mautic deprecates ``addContact()`` in Mautic 8 and changes it to mapping the ``contact`` association with Doctrine attributes: ``#[ORM\ManyToOne(targetEntity: Lead::class)]`` plus ``#[ORM\JoinColumn(name: 'contact_id', nullable: false, onDelete: 'CASCADE')]``. See the :xref:`Mautic 8 upgrade guide`.
+
         :param bool $nullable: ``TRUE`` to allow ``NULL`` values.
         :param string $onDelete: Foreign key reference option such as ``CASCADE`` or ``SET NULL``.
         :param bool $isPrimaryKey: ``TRUE`` to configure this field as a primary key for the table.
@@ -150,6 +154,10 @@ You can build the schema through Doctrine's ``Doctrine\ORM\Mapping\Builder\Class
 
         Creates a many to many field to the targeted entity. Instantiates and returns a ``Mautic\CoreBundle\Doctrine\Mapping\ManyToManyAssociationBuilder`` object that decorates ``Doctrine\ORM\Mapping\Builder\ManyToManyAssociationBuilder`` with ``orphanRemoval()`` support.
 
+        .. note::
+
+           Mautic deprecates ``Mautic\CoreBundle\Doctrine\Mapping\ManyToManyAssociationBuilder`` in Mautic 8 and changes this method to return Doctrine's own ``Doctrine\ORM\Mapping\Builder\ManyToManyAssociationBuilder``, which also supports ``orphanRemoval()``. See the :xref:`Mautic 8 database docs`.
+
         :param string $name: Name of the ORM field.
         :param string $targetEntity: Fully qualified classname for the targeted entity.
 
@@ -167,6 +175,10 @@ You can build the schema through Doctrine's ``Doctrine\ORM\Mapping\Builder\Class
     .. php:method:: createOneToMany(string $name, string $targetEntity)
 
         Creates a field with a one to many relationship to the targeted entity. Instantiates and returns a ``Mautic\CoreBundle\Doctrine\Mapping\OneToManyAssociationBuilder`` object that decorates ``Doctrine\ORM\Mapping\Builder\OneToManyAssociationBuilder`` with ``orphanRemoval()`` support.
+
+        .. note::
+
+           Mautic deprecates ``Mautic\CoreBundle\Doctrine\Mapping\OneToManyAssociationBuilder`` in Mautic 8 and changes this method to return Doctrine's own ``Doctrine\ORM\Mapping\Builder\OneToManyAssociationBuilder``, which also supports ``orphanRemoval()``. See the :xref:`Mautic 8 database docs`.
 
         :param string $name: Name of the ORM field.
         :param string $targetEntity: Fully qualified classname for the targeted entity.
@@ -191,6 +203,10 @@ You can build the schema through Doctrine's ``Doctrine\ORM\Mapping\Builder\Class
 
 Entity annotations
 ******************
+
+.. note::
+
+   Mautic 8 upgrades to Doctrine ORM 3, which removes support for annotations. Mautic deprecates annotations such as ``@ORM\Table`` in Mautic 8 and changes them to PHP attributes such as ``#[ORM\Table(name: 'worlds')]``. See the :xref:`Mautic 8 upgrade guide`.
 
 You can choose to use annotations instead of the PHP static method. Refer to :xref:`Doctrine's documentation on available annotations<Doctrine ORM annotations>`.
 

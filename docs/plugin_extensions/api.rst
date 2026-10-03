@@ -16,6 +16,10 @@ API
 To add custom API endpoints, define the routes under the API firewall in the :doc:`Plugin's config file</plugins/config>`.
 This places the route behind ``/api`` which is only accessible to authorized Users.
 
+.. note::
+
+   Mautic deprecates the ``mautic.security`` service ID in Mautic 8 and changes it to the ``Mautic\CoreBundle\Security\Permissions\CorePermissions`` class name. Reference the service by its class name instead of the ``'mautic.security'`` argument in the following example. See the :xref:`Mautic 8 upgrade guide`.
+
 .. code-block:: php
 
     <?php

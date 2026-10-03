@@ -42,6 +42,10 @@ When permission verification is necessary - for instance ``plugin:helloWorld:wor
 Using permissions
 *****************
 
+.. note::
+
+   Mautic deprecates the ``mautic.security`` service ID in Mautic 8 and changes it to the ``Mautic\CoreBundle\Security\Permissions\CorePermissions`` class name. Reference the service by its class name instead, for example ``$this->get(CorePermissions::class)``. See the :xref:`Mautic 8 upgrade guide`.
+
 .. code-block:: php
 
    <?php
@@ -228,6 +232,10 @@ This method is mandatory. The return value must match the ``bundleName`` and the
 
 Permission aliases
 ******************
+
+.. note::
+
+   Mautic deprecates declaring ``getSynonym()`` without a return type in Mautic 8 and changes it to declare a native ``array`` return type. Add the return type to your override, ``protected function getSynonym($name, $level): array``. Otherwise, PHP fails with an error such as ``Declaration of X::getSynonym() must be compatible with Y::getSynonym(): array``. See the :xref:`Mautic 8 upgrade guide`.
 
 .. code-block:: php
 

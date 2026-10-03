@@ -75,6 +75,10 @@ Configuration
 
 Plugins come preconfigured to utilize filesystem caching.
 
+.. note::
+
+   Mautic deprecates the ``mautic.cache.adapter.filesystem`` and ``mautic.cache.adapter.redis`` service IDs in Mautic 8 and changes them to the ``Mautic\CacheBundle\Cache\Adapter\FilesystemTagAwareAdapter`` and ``Mautic\CacheBundle\Cache\Adapter\RedisAdapter`` class names. Set ``cache_adapter`` to the adapter's class name. See the :xref:`Mautic 8 upgrade guide`.
+
 These are the default settings:
 
 .. code-block:: php
