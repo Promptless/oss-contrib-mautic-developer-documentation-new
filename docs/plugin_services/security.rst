@@ -40,6 +40,10 @@ When validating permissions, for example ``plugin:helloWorld:worlds:create``, Ma
 Using permissions
 *****************
 
+.. note::
+
+   Mautic deprecates the ``mautic.security`` service ID in Mautic 8 and changes it to the ``Mautic\CoreBundle\Security\Permissions\CorePermissions`` class name. Reference the service by its class name instead, for example ``$this->get(CorePermissions::class)``. See the :xref:`Mautic 8 upgrade guide`.
+
 You can use permissions as follows in your controllers and services:
 
 .. code-block:: php
@@ -269,6 +273,10 @@ For example, if ``HelloWorldBundle`` is the bundle's name, then this would be ``
 
 Permission aliases
 ==================
+
+.. note::
+
+   Mautic deprecates declaring ``getSynonym()`` without a return type in Mautic 8 and changes it to declare a native ``array`` return type. Add the return type to your override, ``protected function getSynonym($name, $level): array``. Otherwise, PHP fails with an error such as ``Declaration of X::getSynonym() must be compatible with Y::getSynonym(): array``. See the :xref:`Mautic 8 upgrade guide`.
 
 .. code-block:: php
 

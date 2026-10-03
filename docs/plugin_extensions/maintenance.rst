@@ -19,6 +19,10 @@ Note that ``$sql`` and ``$sqlParameters`` are only used for debugging and shown 
 
 .. warning:: Don't delete records when the event is a dry run. You can use ``$event->isDryRun()`` to validate whether this is the case. See the code sample below for more details.
 
+.. note::
+
+   Mautic 8 upgrades to Doctrine DBAL 4, which removes the query builder's ``execute()`` method. Mautic deprecates the ``execute()`` calls in the following example in Mautic 8 and changes them to ``executeQuery()`` for the count query and ``executeStatement()`` for the delete query. Read the count with ``fetchOne()``. See the :xref:`Mautic 8 upgrade guide` and the :xref:`Doctrine DBAL 4 query builder docs`.
+
 .. code-block:: php
 
     <?php

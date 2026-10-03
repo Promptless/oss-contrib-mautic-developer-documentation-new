@@ -235,7 +235,7 @@ Form properties
      - Render style status - set to ``0`` or ``false`` to turn off the inclusion of template CSS in the Form output. When not set, it defaults to on
    * - ``formType``
      - string
-     - Type of the Form - ``standalone`` or ``campaign``
+     - Type of the Form - ``standalone`` or ``campaign``. Mautic deprecates this since Mautic 7.1 and removes it in Mautic 8 because Form types are no longer used
    * - ``postAction``
      - string
      - Action to perform after submission. Must be one of:
@@ -660,7 +660,7 @@ POST parameters
        Array of Form actions. Refer to the :ref:`Action parameters` table for available options
    * - ``formType``
      - string
-     - Type of the Form - ``standalone`` or ``campaign``
+     - Type of the Form - ``standalone`` or ``campaign``. Mautic deprecates this since Mautic 7.1 and removes it in Mautic 8 because Form types are no longer used
    * - ``postAction``
      - string
      - Action to perform after submission. Must be one of:

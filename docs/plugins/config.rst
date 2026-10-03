@@ -464,6 +464,10 @@ Service config items
 
 Services define the Plugin's classes and their dependencies with Mautic and Symfony. Services defined within specific keys are auto-tagged as noted below.
 
+.. note::
+
+   Mautic deprecates the ``services`` group in ``Config/config.php`` in Mautic 8 and changes it to registering Symfony services in each bundle's ``Config/services.php``. Mautic 8 no longer reads the ``services`` array from ``Config/config.php``. See the :xref:`Mautic 8 autowiring docs`.
+
 .. code-block:: php
 
     <?php
@@ -527,7 +531,7 @@ For convenience, Mautic auto-tags services defined within specific keys.
       - Registers the service with :xref:`Symfony as a custom form field type<Symfony custom form field type tag>`.
     * - ``models``
       - ``mautic.model``
-      - Deprecated. Use service dependency injection instead.
+      - Deprecated. Use service dependency injection instead. Mautic removes this in Mautic 8. Register models as services by their class name.
     * - ``permissions``
       - ``mautic.permissions``
       - Registers the service with Mautic's :ref:`permission service<security-roles-and-permissions>`.
@@ -587,7 +591,7 @@ Key each service with a unique name to all of Mautic, including other Plugins.
     * - ``methodCalls``
       - no
       - array[]
-      - Define methods to call after the service is instantiated. Use an array of arrays with keys as the method name and values the arguments to pass into the given method. For example,  ``['methodCalls' => ['setSecurity' => ['mautic.security'],],],``.
+      - Define methods to call after the service is instantiated. Use an array of arrays with keys as the method name and values the arguments to pass into the given method. For example,  ``['methodCalls' => ['setSecurity' => ['mautic.security'],],],``. Mautic deprecates the example's ``mautic.security`` service ID in Mautic 8 and changes it to ``Mautic\CoreBundle\Security\Permissions\CorePermissions``. See the :xref:`Mautic 8 upgrade guide`.
     * - ``decoratedService``
       - no
       - string

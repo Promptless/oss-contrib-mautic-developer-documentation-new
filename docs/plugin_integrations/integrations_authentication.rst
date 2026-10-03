@@ -147,6 +147,10 @@ The Integration bundle comes with a number of popular authentication protocols a
 
 The best way to get configuration values such as username, password, consumer key, consumer secret, and so forth is by using the ``mautic.integrations.helper`` ``(\Mautic\IntegrationsBundle\Helper\IntegrationsHelper)`` service to leverage the configuration stored in the ``Integration`` entity's API keys.
 
+.. note::
+
+   Mautic deprecates the ``mautic.integrations.helper`` service ID in Mautic 8 and changes it to the ``Mautic\IntegrationsBundle\Helper\IntegrationsHelper`` class name. See the :xref:`Mautic 8 upgrade guide`.
+
 .. code-block:: php
 
     <?php

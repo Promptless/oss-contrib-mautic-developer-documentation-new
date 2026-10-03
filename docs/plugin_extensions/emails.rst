@@ -27,6 +27,10 @@ Email token capabilities consist of two parts:
 * Registering custom tokens
 * Rendering custom tokens
 
+.. note::
+
+   Mautic deprecates the ``EmailEvents::EMAIL_ON_BUILD`` and ``EmailEvents::EMAIL_ON_DISPLAY`` constants in Mautic 8 and changes them to the ``Mautic\EmailBundle\Event\EmailOnBuildEvent`` and ``Mautic\EmailBundle\Event\EmailDisplayEvent`` event classes. Key your subscribers on ``EmailOnBuildEvent::class`` and ``EmailDisplayEvent::class`` instead of the constants, and type the build listener's argument as ``EmailOnBuildEvent``. See the :xref:`Mautic 8 Emails docs`.
+
 Registering custom tokens in builders
 =====================================
 
@@ -267,6 +271,10 @@ To do this, the Plugin needs to add an event listener for three events:
 1. ``EmailEvents::MONITORED_EMAIL_CONFIG`` This event is dispatched to inject the fields into Mautic's Configuration to configure the IMAP inbox and folder that should be monitored.
 2. ``EmailEvents::EMAIL_PRE_FETCH`` This event is dispatched during the execution of the ``mautic:email:fetch`` command. It's used to inject search criteria for the messages desired.
 3. ``EmailEvents::EMAIL_PARSE`` This event parses the messages fetched by the command.
+
+.. note::
+
+   Mautic deprecates the ``EmailEvents::MONITORED_EMAIL_CONFIG`` constant in Mautic 8 and changes it to the ``Mautic\EmailBundle\Event\MonitoredEmailEvent`` event class. Key your subscriber on ``MonitoredEmailEvent::class`` instead of the constant. Mautic keeps the ``EMAIL_PRE_FETCH`` and ``EMAIL_PARSE`` constants. See the :xref:`Mautic 8 Emails docs`.
 
 .. code-block:: PHP
 
