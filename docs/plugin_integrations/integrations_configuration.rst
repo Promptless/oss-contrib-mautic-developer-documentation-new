@@ -205,6 +205,10 @@ Currently the IntegrationsBundle provides default features. To use these feature
 ``getSupportedFeatures`` returns an array of supported features.
 For example, if the Integration syncs with Mautic Contacts, ``getSupportedFeatures()`` could ``return [ConfigFormFeaturesInterface::FEATURE_SYNC];``.
 
+.. note::
+
+   Mautic deprecates declaring the ``FEATURE_SYNC`` and ``FEATURE_PUSH_ACTIVITY`` constants without a type in Mautic 8 and changes them to typed ``string`` constants, for example ``public const string FEATURE_SYNC = 'sync';``. If your Integration class overrides one of these constants, add the ``string`` type to the override. Otherwise, PHP fails with an error such as ``Type of X::FEATURE_SYNC must be compatible with Y::FEATURE_SYNC``. See the :xref:`Mautic 8 upgrade guide`.
+
 .. php:interface:: \Mautic\IntegrationsBundle\Integration\Interfaces\ConfigFormFeaturesInterface
 
 .. php:attr:: public const FEATURE_SYNC = 'sync';
