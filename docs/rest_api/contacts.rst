@@ -1397,14 +1397,14 @@ Get a list of owners that you can use to assign Contacts to when creating/editin
 .. vale off
 
 HTTP Request
-============
+~~~~~~~~~~~~
 
 .. vale on
 
 ``GET /contacts/list/owners``
 
-Query Parameters
-================
+Query parameters
+~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -1419,7 +1419,7 @@ Query Parameters
      - Starting row for the owners returned. Must be zero or a positive integer. Defaults to 0. Applies only when you set ``limit``.
 
 Response
-========
+~~~~~~~~
 
 ``Expected Response Code: 200``
 
@@ -1440,8 +1440,8 @@ The request returns ``HTTP 400 (Bad Request)`` when ``limit`` is zero, negative,
      }
    ]
 
-Owner Properties
-================
+Owner properties
+~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
