@@ -15,7 +15,7 @@ Implementing variant - A/B test - support to entities
 
 Mautic provides helper interfaces and traits to add variant support to an entity. This is particularly useful for A/B testing.
 
-``Mautic\CoreBundle\Entity\VariantInterface``
+``Mautic\CoreBundle\Entity\VariantEntityInterface``
     This interface ensures an entity has everything Mautic needs to handle variants correctly.
 
 ``Mautic\CoreBundle\Entity\VariantEntityTrait``
